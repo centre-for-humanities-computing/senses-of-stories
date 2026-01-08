@@ -1,5 +1,5 @@
 This repo was used to process data and explore results for the *Senses of Stories* project.
-
+It is a collaboration between several Canadian and European universities and is led by McGill University
 
 The repo is structured as follows:
 
@@ -15,6 +15,7 @@ The repo is structured as follows:
 │   ├── find_example_sentences.py  # Find example sentences from the dataset
 │   └── exploring_results.ipynb    # Explore annotated data
 ├── src/
+│   ├── utils.py                   # Utility functions
 │   ├── process_data.py            # Process raw data files
 │   └── remove_sexual_content.py   # Filter sexual/profanity content
 ├── results/
