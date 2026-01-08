@@ -24,3 +24,6 @@ The repo is structured as follows:
 
 ### Team
 The project is a collaboration between several Canadian (University of Alberta, McGill University) and European universities (Aarhus University, University of Groningen) and is led by McGill University.
+
+To get in touch, contact:
+- Pascale Feldkamp (pascale.feldkamp@au.cas.dk)

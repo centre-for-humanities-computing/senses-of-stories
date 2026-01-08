@@ -1,0 +1,6 @@
+
+=== Run 20260108-200857 ===
+Krippendorff's alpha for imageability: 0.3398
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.3317
+Krippendorff's alpha for concreteness: 0.3914
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.3901
