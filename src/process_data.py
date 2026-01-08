@@ -148,11 +148,11 @@ print("Total rows after concreteness thresholding:", len(df))
 # save data
 # lowercase colnames
 df.columns = [col.lower() for col in df.columns]
-df.to_csv("data/DATA_senses_sentences_scored.csv", index=False)
+df.to_csv("../data/org_data_processing/data/DATA_senses_sentences_scored.csv", index=False)
 
 # %%
 # reopen it
-df = pd.read_csv("data/DATA_senses_sentences_scored.csv", encoding='utf-8')
+df = pd.read_csv("../data/org_data_processing/data/DATA_senses_sentences_scored.csv", encoding='utf-8')
 df.columns = [col.lower() for col in df.columns]
 df.head()
 # %%

@@ -9,7 +9,7 @@ ts = time.strftime("%Y-%m-%d_%H-%M")
 print("Timestamp:", ts)
 
 # reopen it
-df = pd.read_csv("DATA_senses_sentences_scored.csv")
+df = pd.read_csv("../data/org_data_processing/data/DATA_senses_sentences_scored.csv")
 df.head()
 # %%
 
@@ -50,7 +50,7 @@ df["pred_profanity"] = swear_scores
 
 # %%
 # save
-df.to_csv(f"{ts}_DATA_senses_sentences_scored_labelled.csv", index=False, encoding='utf-8')
+df.to_csv(f"../data/org_data_processing/data/{ts}_DATA_senses_sentences_scored_labelled.csv", index=False, encoding='utf-8')
 df.head()
 
 # %%
@@ -79,7 +79,7 @@ polished = polished[~polished["text"].str.contains("Press,", case=False, na=Fals
 
 # %%
 print("Total rows after removing sexual/profanity content:", len(polished))
-polished.to_csv(f"{ts}_senses_stories_final_set.csv", index=False, encoding='utf-8')
+polished.to_csv(f"../data/org_data_processing/data/{ts}_senses_stories_final_set.csv", index=False, encoding='utf-8')
 # %%
 
 
@@ -134,6 +134,6 @@ df = df[~df['text'].str.endswith((':', ';'))]
 import time
 ts = time.strftime("%Y-%m-%d_%H-%M")
 print(len(df))
-df.to_csv(f"{ts}_senses_stories_cleaned.csv", index=False, encoding='utf-8')
+df.to_csv(f"../data/org_data_processing/data/{ts}_senses_stories_cleaned.csv", index=False, encoding='utf-8')
 
 # %%
