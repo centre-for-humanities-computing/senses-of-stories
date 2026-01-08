@@ -1,5 +1,5 @@
 This repo was used to process data and explore results for the *Senses of Stories* project.
-It is a collaboration between several Canadian and European universities and is led by McGill University
+It is a collaboration between several Canadian (University of Alberta, McGill University) and European universities (Aarhus University, University of Groningen) and is led by McGill University
 
 The repo is structured as follows:
 
