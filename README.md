@@ -6,6 +6,7 @@ The repo is structured as follows:
 ```
 ├── README.md
 ├── data/
+│   ├── beta_data/                 # Data from the beta study (not pushed)
 │   └── org_data_processing/
 │       ├── README.md              # Description of the columns in the dataset
 │       ├── process_data.py        # Script to process raw data files
