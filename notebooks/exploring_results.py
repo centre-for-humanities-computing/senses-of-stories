@@ -28,6 +28,11 @@ results_log.write(f"Level of measurement for Krippendorff's alpha: {level_of_mea
 # %%
 df = pd.read_csv("../data/beta_data/2026-01-13_the-senses-of-stories-classifications.csv")#../data/beta_data/2026-01-08_betadata.csv")
 
+# drop everything created before 2025-11-26 13:15:19 UTC
+df["created_at"] = pd.to_datetime(df["created_at"], utc=True)
+cutoff_date = pd.to_datetime("2025-11-26 13:15:19", utc=True)
+df = df[df["created_at"] >= cutoff_date]
+
 # add dummy user_id column from user_name
 df["user_id"] = df["user_name"].astype("category").cat.codes
 df["user_id"] = df["user_id"].apply(lambda x: f"annotator_{x}")
@@ -55,6 +60,8 @@ print(f"Imageability + Concreteness data shape: {img_conc.shape}")
 
 # %%
 # ---- Imageability + Concreteness data cleaning ----
+
+results_log.write("\n--- Imageability + Concreteness Data Analysis ---\n")
 
 # we remove any additional formatting on "value" column () around numbers, any text etc
 def extract_number(x):
@@ -114,7 +121,7 @@ for key, data in dfs.items():
 # log average SD
 for key in storage:
     avg_std = storage[key][f"{key}_std"].mean()
-    print(f"Average standard deviation/subject for {key}: {avg_std:.4f}")
+    print(f"Average standard deviation/subject for {key}: {avg_std:.4f}\n")
     results_log.write(f"Average standard deviation/subject for {key}: {avg_std:.4f}\n")
 
 # %% 
@@ -134,6 +141,9 @@ for key in storage:
 # alright, let's see how much annotators agree with each other
 threshold = 5  # minimum number of annotators to filter on
 
+# add space in log
+results_log.write("\n--- Krippendorff's alpha results ---\n")
+
 for key in storage:
     data = storage[key]
     annotator_cols = [col for col in data.columns if col.startswith("annotator_")]
@@ -150,9 +160,11 @@ for key in storage:
     results_log.write(f"Krippendorff's alpha for {key} (n_annotators >= {threshold}): {filtered_alpha:.4f}\n")
 
 
+
 # %%
 
 # ---- Senses data cleaning ----
+results_log.write("\n--- Senses Data Analysis ---\n")
 
 # explode the list of annotations
 long_df = senses_df.explode("value")
@@ -167,12 +179,10 @@ def extract_score(x):
 long_df["modality"] = long_df["value"].apply(lambda x: x.get("choice"))
 long_df["score"] = long_df["value"].apply(extract_score)
 
-# log how many 0 scores there are
-num_zero_scores = long_df[long_df["score"] == 0].shape[0]
-print(f"Number of 'unsure' (0) scores in senses data: {num_zero_scores}")
-results_log.write(f"Number of 'unsure' (0) scores in senses data: {num_zero_scores}\n")
-# remove 0 scores
-long_df = long_df[long_df["score"] != 0]
+# log how many "NONE" modalities there are
+none_count = long_df[long_df["modality"] == "NONE"].shape[0]
+print(f"Number of 'NONE' modality annotations: {none_count}")
+results_log.write(f"Number of 'NONE' modality annotations: {none_count}\n")
 # and remove "NONE" modalities
 long_df = long_df[long_df["modality"] != "NONE"]
 
@@ -233,6 +243,8 @@ filtered_long_df = filtered_long_df.dropna(subset=["score"])
 print(f"Filtered senses data shape: {filtered_long_df.shape}")
 print(f"original senses data shape: {long_df.shape}")
 
+results_log.write("\n--- Krippendorff's alpha results ---\n")
+
 modalities = filtered_long_df["modality"].unique()
 for modality in modalities:
     modality_df = filtered_long_df[filtered_long_df["modality"] == modality]
@@ -243,6 +255,7 @@ for modality in modalities:
     print(f"Krippendorff's alpha for modality {modality}: {alpha:.4f}")
     results_log.write(f"Krippendorff's alpha for modality {modality}: {alpha:.4f}\n")
 
+results_log.write("\n--- Krippendorff's alpha results (filtered by annotator count) ---\n")
 threshold = 3  # minimum number of annotators to filter on
 filtered_long_df_high_annotators = filtered_long_df.loc[filtered_long_df["count_y"] >= threshold]
 # print number of unique subject_ids and modalities after filtering
