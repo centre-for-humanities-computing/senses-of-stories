@@ -22,7 +22,7 @@ ts = time.strftime("%Y%m%d-%H")
 results_log = open(results_log_path, "a")  # append mode
 results_log.write(f"\n=== Run {ts} ===\n")
 
-level_of_measurement = 'interval'  # or ordinal for krippendorff's alpha
+level_of_measurement = 'ordinal'  # or interval for krippendorff's alpha
 results_log.write(f"Level of measurement for Krippendorff's alpha: {level_of_measurement}\n")
 
 # %%
@@ -173,6 +173,8 @@ print(f"Number of 'unsure' (0) scores in senses data: {num_zero_scores}")
 results_log.write(f"Number of 'unsure' (0) scores in senses data: {num_zero_scores}\n")
 # remove 0 scores
 long_df = long_df[long_df["score"] != 0]
+# and remove "NONE" modalities
+long_df = long_df[long_df["modality"] != "NONE"]
 
 # keep only what you need
 long_df = long_df[["subject_ids", "user_id", "modality", "score"]].reset_index(drop=True)
@@ -194,6 +196,34 @@ plt.xticks(rotation=45)
 plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_senses_annotation_counts.png"))
 plt.show()
 
+# let's also see the mean scores per modality using boxplots
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+sns.boxplot(data=long_df, x="modality", y="score")
+plt.xlabel("Modality")
+plt.ylabel("Scores")
+# rotate x labels
+plt.xticks(rotation=45)
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_senses_scores_boxplot.png"))
+plt.show()
+
+# and again with distribution plots
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+sns.violinplot(data=long_df, x="modality", y="score", inner="quartile")
+plt.xlabel("Modality")
+plt.ylabel("Scores")
+# rotate x labels
+plt.xticks(rotation=45)
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_senses_scores_violinplot.png"))
+plt.show()
+
+# and log mean SD per modality
+for modality in long_df["modality"].unique():
+    modality_df = long_df[long_df["modality"] == modality]
+    sd = modality_df["score"].std()
+    print(f"Standard deviation of scores for modality {modality}: {sd:.4f}")
+    results_log.write(f"Standard deviation of scores for modality {modality}: {sd:.4f}\n")
 # %%
 # now, for all subjects ids with count > 1, we want the krippendorff's alpha per modality
 filtered_long_df = long_df.merge(annotation_counts, on=["subject_ids", "modality"])
