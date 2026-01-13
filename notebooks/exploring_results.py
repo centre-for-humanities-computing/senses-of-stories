@@ -8,6 +8,8 @@ import ast
 import krippendorff
 import os
 import time
+import itertools
+import numpy as np
 
 # %%
 # CONFIG
@@ -16,12 +18,15 @@ os.makedirs(FIG_FOLDER, exist_ok=True)
 results_log_path = "../results/beta_results/results_log.txt"
 os.makedirs(os.path.dirname(results_log_path), exist_ok=True)
 
-ts = time.strftime("%Y%m%d-%H%M%S")
+ts = time.strftime("%Y%m%d-%H")
 results_log = open(results_log_path, "a")  # append mode
 results_log.write(f"\n=== Run {ts} ===\n")
 
+level_of_measurement = 'interval'  # or ordinal for krippendorff's alpha
+results_log.write(f"Level of measurement for Krippendorff's alpha: {level_of_measurement}\n")
+
 # %%
-df = pd.read_csv("../data/beta_data/2026-01-08_betadata.csv")
+df = pd.read_csv("../data/beta_data/2026-01-13_the-senses-of-stories-classifications.csv")#../data/beta_data/2026-01-08_betadata.csv")
 
 # add dummy user_id column from user_name
 df["user_id"] = df["user_name"].astype("category").cat.codes
@@ -63,8 +68,22 @@ img_conc["value"] = img_conc["value"].apply(extract_number)
 # subsetting again
 img = img_conc[img_conc["workflow_name"] == "Imageability"]
 conc = img_conc[img_conc["workflow_name"] == "Concreteness"]
-print(f"Imageability data shape: {img.shape}")
-print(f"Concreteness data shape: {conc.shape}")
+results_log.write(f"Imageability data shape: {img.shape}\n")
+results_log.write(f"Concreteness data shape: {conc.shape}\n")
+
+
+# %%
+# log how many "unsure" ratings there are. Unsure is == 0
+unsure_img = img[img["value"] == 0].shape[0]
+unsure_conc = conc[conc["value"] == 0].shape[0]
+print(f"Number of 'unsure' ratings in Imageability: {unsure_img}")
+print(f"Number of 'unsure' ratings in Concreteness: {unsure_conc}")
+results_log.write(f"Number of 'unsure' ratings in Imageability: {unsure_img}\n")
+results_log.write(f"Number of 'unsure' ratings in Concreteness: {unsure_conc}\n")
+
+# then remove them
+img = img[img["value"] != 0]
+conc = conc[conc["value"] != 0]
 
 # %%
 dfs = {"imageability": img, "concreteness": conc}
@@ -76,6 +95,8 @@ for key, data in dfs.items():
     pivot_df = data.pivot_table(index=["subject_ids"], columns="user_id", values="value").reset_index().rename_axis(None, axis=1)
     # and we add a mean
     pivot_df[f"{key}_mean"] = pivot_df.drop(columns=["subject_ids"]).mean(axis=1, skipna=True)
+    # and sd
+    pivot_df[f"{key}_std"] = pivot_df.drop(columns=["subject_ids"]).std(axis=1, skipna=True)
     pivot_df["n_annotators"] = pivot_df.drop(columns=["subject_ids"]).count(axis=1)
     storage[key] = pivot_df
 
@@ -88,6 +109,13 @@ for key, data in dfs.items():
     plt.ylabel("Frequency")
     plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_{key}_n_annotators_distribution.png"))
     plt.show()
+
+# %%
+# log average SD
+for key in storage:
+    avg_std = storage[key][f"{key}_std"].mean()
+    print(f"Average standard deviation/subject for {key}: {avg_std:.4f}")
+    results_log.write(f"Average standard deviation/subject for {key}: {avg_std:.4f}\n")
 
 # %% 
 for key in storage:
@@ -110,16 +138,97 @@ for key in storage:
     data = storage[key]
     annotator_cols = [col for col in data.columns if col.startswith("annotator_")]
     matrix = data[annotator_cols].to_numpy().T  # Transpose to have annotators as rows
-    alpha = krippendorff.alpha(reliability_data=matrix, level_of_measurement='interval')
+    alpha = krippendorff.alpha(reliability_data=matrix, level_of_measurement=level_of_measurement)
     print(f"Krippendorff's alpha for {key}: {alpha:.4f}")
     # log to results file
     results_log.write(f"Krippendorff's alpha for {key}: {alpha:.4f}\n")
     # add filtered scores
     filtered_data = data[data["n_annotators"] >= threshold]
     filtered_matrix = filtered_data[annotator_cols].to_numpy().T
-    filtered_alpha = krippendorff.alpha(reliability_data=filtered_matrix, level_of_measurement='interval')
+    filtered_alpha = krippendorff.alpha(reliability_data=filtered_matrix, level_of_measurement=level_of_measurement)
     print(f"Krippendorff's alpha for {key} (n_annotators >= {threshold}): {filtered_alpha:.4f}")
-    results_log.write(f"Krippendorff's alpha for {key} (n_annotators >= 5): {filtered_alpha:.4f}\n")
+    results_log.write(f"Krippendorff's alpha for {key} (n_annotators >= {threshold}): {filtered_alpha:.4f}\n")
+
+
+# %%
+
+# ---- Senses data cleaning ----
+
+# explode the list of annotations
+long_df = senses_df.explode("value")
+
+# unpack the dicts
+def extract_score(x):
+    answers = x.get("answers", {})
+    if not answers:
+        return None
+    return next(iter(answers.values()))
+
+long_df["modality"] = long_df["value"].apply(lambda x: x.get("choice"))
+long_df["score"] = long_df["value"].apply(extract_score)
+
+# log how many 0 scores there are
+num_zero_scores = long_df[long_df["score"] == 0].shape[0]
+print(f"Number of 'unsure' (0) scores in senses data: {num_zero_scores}")
+results_log.write(f"Number of 'unsure' (0) scores in senses data: {num_zero_scores}\n")
+# remove 0 scores
+long_df = long_df[long_df["score"] != 0]
+
+# keep only what you need
+long_df = long_df[["subject_ids", "user_id", "modality", "score"]].reset_index(drop=True)
+# remove everything that is not a number from score
+long_df["score"] = long_df["score"].apply(extract_number)
+
+# lets see the amount of annotations per modality and subject
+# add a count column
+long_df["count"] = 1
+annotation_counts = long_df.groupby(["subject_ids", "modality"])["count"].sum().reset_index()
+# make a bar plot
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+sns.barplot(data=annotation_counts, x="modality", y="count", ci=None)
+plt.xlabel("Modality")
+plt.ylabel("Number of Annotations")
+# rotate x labels
+plt.xticks(rotation=45)
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_senses_annotation_counts.png"))
+plt.show()
+
+# %%
+# now, for all subjects ids with count > 1, we want the krippendorff's alpha per modality
+filtered_long_df = long_df.merge(annotation_counts, on=["subject_ids", "modality"])
+filtered_long_df = filtered_long_df[filtered_long_df["count_y"] > 1]
+# and remove any rows with NaN scores
+filtered_long_df = filtered_long_df.dropna(subset=["score"])
+print(f"Filtered senses data shape: {filtered_long_df.shape}")
+print(f"original senses data shape: {long_df.shape}")
+
+modalities = filtered_long_df["modality"].unique()
+for modality in modalities:
+    modality_df = filtered_long_df[filtered_long_df["modality"] == modality]
+    pivot_df = modality_df.pivot_table(index=["subject_ids"], columns="user_id", values="score").reset_index().rename_axis(None, axis=1)
+    annotator_cols = [col for col in pivot_df.columns if col.startswith("annotator_")]
+    matrix = pivot_df[annotator_cols].to_numpy().T  # Transpose to have annotators as rows
+    alpha = krippendorff.alpha(reliability_data=matrix, level_of_measurement=level_of_measurement)
+    print(f"Krippendorff's alpha for modality {modality}: {alpha:.4f}")
+    results_log.write(f"Krippendorff's alpha for modality {modality}: {alpha:.4f}\n")
+
+threshold = 3  # minimum number of annotators to filter on
+filtered_long_df_high_annotators = filtered_long_df.loc[filtered_long_df["count_y"] >= threshold]
+# print number of unique subject_ids and modalities after filtering
+results_log.write(f"Number of unique subject_ids after filtering: {filtered_long_df_high_annotators['subject_ids'].nunique()}\n")
+results_log.write(f"Number of unique modalities after filtering: {filtered_long_df_high_annotators['modality'].nunique()}\n")
+for modality in modalities:
+    modality_df = filtered_long_df_high_annotators[filtered_long_df_high_annotators["modality"] == modality]
+    pivot_df = modality_df.pivot_table(index=["subject_ids"], columns="user_id", values="score").reset_index().rename_axis(None, axis=1)
+    if pivot_df.shape[0] < 2 or len(annotator_cols) < 2:
+        print(f"Skipping modality {modality}: not enough subjects or annotators")
+        continue
+    annotator_cols = [col for col in pivot_df.columns if col.startswith("annotator_")]
+    matrix = pivot_df[annotator_cols].to_numpy().T  # Transpose to have annotators as rows
+    alpha = krippendorff.alpha(reliability_data=matrix, level_of_measurement=level_of_measurement)
+    print(f"Krippendorff's alpha for modality {modality} (n_annotators >= {threshold}): {alpha:.4f}")
+    results_log.write(f"Krippendorff's alpha for modality {modality} (n_annotators >= {threshold}): {alpha:.4f}\n")
 
 results_log.close()
 
