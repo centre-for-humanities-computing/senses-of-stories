@@ -277,7 +277,46 @@ results_log.close()
 
 # %%
 
+# Paivio (1968)(doi:10.1037/h0025327) split raters into two balanced subgroups, averaged ratings within each subgroup, and then correlated these means; high correlations (r ≈ 0.94) indicated strong inter-rater reliability.
+# implement a Paivio-style inter-group reliability check
 
-storage['imageability'].head()
+threshold = 0  # only include items with at least this many ratings
+n_iterations = 50
+tmp = []
 
+for key in ["imageability", "concreteness"]:
+    data = storage[key]
+    annotator_cols = [col for col in data.columns if col.startswith("annotator_")]
 
+    # Keep items with at least 'threshold' annotators
+    filtered_data = data[data["n_annotators"] >= threshold].copy()
+    print(f"Number of items {key}: {filtered_data.shape[0]}")
+    
+    # Get the list of annotators
+    annotators = filtered_data[annotator_cols].columns.tolist()
+    print(f"Number of annotators for {key}: {len(annotators)}")
+
+    for i in range(n_iterations):
+        # Randomly shuffle annotators and split into two groups
+        np.random.seed(42)  # reproducibility
+        np.random.shuffle(annotators)
+        mid = len(annotators) // 2
+        group1 = annotators[:mid]
+        group2 = annotators[mid:]
+        
+        # Compute mean per item in each group
+        mean1 = filtered_data[group1].mean(axis=1)
+        mean2 = filtered_data[group2].mean(axis=1)
+        
+        # Correlate the two sets of means
+        r = mean1.corr(mean2, method='pearson')
+        tmp.append({"iteration": i, "key": key, "r": r})
+# convert to dataframe
+irr_df = pd.DataFrame(tmp)
+# summarize results
+for key in ["imageability", "concreteness"]:
+    subset = irr_df[irr_df["key"] == key]
+    r = subset["r"].mean()
+    print(f"Paivio-style IRR {key}: r = {r:.4f}")
+
+# %%
