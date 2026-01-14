@@ -276,3 +276,8 @@ for modality in modalities:
 results_log.close()
 
 # %%
+
+
+storage['imageability'].head()
+
+

@@ -42,3 +42,50 @@ Krippendorff's alpha for modality SOUND (n_annotators >= 3): 0.3284
 Krippendorff's alpha for modality TASTE (n_annotators >= 3): 0.7426
 Krippendorff's alpha for modality TOUCH (n_annotators >= 3): 0.1826
 Krippendorff's alpha for modality SMELL (n_annotators >= 3): 0.1455
+
+=== Run 20260114-14 ===
+Level of measurement for Krippendorff's alpha: ordinal
+
+=== Run 20260114-14 ===
+Level of measurement for Krippendorff's alpha: ordinal
+
+--- Imageability + Concreteness Data Analysis ---
+Imageability data shape: (2064, 15)
+Concreteness data shape: (2083, 15)
+Number of 'unsure' ratings in Imageability: 54
+Number of 'unsure' ratings in Concreteness: 41
+Average standard deviation/subject for imageability: 1.3925
+Average standard deviation/subject for concreteness: 1.3441
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for imageability: 0.3486
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.3455
+Krippendorff's alpha for concreteness: 0.3937
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.3933
+
+--- Senses Data Analysis ---
+Number of 'NONE' modality annotations: 89
+Standard deviation of scores for modality INNERBODILYSENSATIONS: 1.5825
+Standard deviation of scores for modality SIGHT: 1.6333
+Standard deviation of scores for modality SOUND: 1.7254
+Standard deviation of scores for modality TASTE: 1.8695
+Standard deviation of scores for modality TOUCH: 1.5999
+Standard deviation of scores for modality SMELL: 1.6087
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for modality INNERBODILYSENSATIONS: 0.1920
+Krippendorff's alpha for modality SIGHT: 0.1631
+Krippendorff's alpha for modality SOUND: 0.4446
+Krippendorff's alpha for modality TASTE: 0.6717
+Krippendorff's alpha for modality TOUCH: 0.4052
+Krippendorff's alpha for modality SMELL: 0.5386
+
+--- Krippendorff's alpha results (filtered by annotator count) ---
+Number of unique subject_ids after filtering: 66
+Number of unique modalities after filtering: 6
+Krippendorff's alpha for modality INNERBODILYSENSATIONS (n_annotators >= 3): 0.0963
+Krippendorff's alpha for modality SIGHT (n_annotators >= 3): 0.2447
+Krippendorff's alpha for modality SOUND (n_annotators >= 3): 0.3284
+Krippendorff's alpha for modality TASTE (n_annotators >= 3): 0.7426
+Krippendorff's alpha for modality TOUCH (n_annotators >= 3): 0.1826
+Krippendorff's alpha for modality SMELL (n_annotators >= 3): 0.1455

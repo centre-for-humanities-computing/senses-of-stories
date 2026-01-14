@@ -1,0 +1,28 @@
+
+=== Run 20260114-12 ===
+Level of measurement for Krippendorff's alpha: ordinal
+
+Average standard deviation/subject for imageability: 1.3925
+--- IMAGEABILITY ---
+alpha for imageability: 0.3486
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.3455
+Average standard deviation/subject for concreteness: 1.3441
+--- CONCRETENESS ---
+alpha for concreteness: 0.3937
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.3933
+
+--- Forced to 5-point scale ---
+Average standard deviation/subject for imageability: 1.0474
+--- IMAGEABILITY ---
+alpha for imageability: 0.3336
+when (n_annotators >= 5): 0.3307
+Average standard deviation/subject for concreteness: 0.9707
+--- CONCRETENESS ---
+alpha for concreteness: 0.3813
+when (n_annotators >= 5): 0.3806
+
+### P: Seems like: Reducing the scale doesn’t fix disagreement. 
+When we collapsed to 5 points, α dropped slightly. 
+This means the disagreements aren’t about minor decimal-level differences between points; 
+they’re more fundamental—annotators simply perceive sentences differently.
+
