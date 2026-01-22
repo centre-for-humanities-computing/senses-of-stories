@@ -34,6 +34,6 @@ Low but fairly consistent; aligns with values reported; for imageability: at the
   - **Sight:** higher SD and more ratings, reflecting salience of this sense
 - General hierarchy: salient modalities (SIGHT, SOUND) → more ratings and higher SD; rare modalities (TASTE, SMELL) → sparse and lower α.
 
-![alt text](../../figs/beta_results/20260113-15_senses_annotation_counts.png)
-![alt text](../../figs/beta_results/20260113-15_senses_scores_boxplot.png)
+![alt text](../../figs/beta_results/20260113-14_senses_annotation_counts.png)
+![alt text](../../figs/beta_results/20260113-14_senses_scores_boxplot.png)
 
