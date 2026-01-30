@@ -1,0 +1,83 @@
+
+=== Run 20260130 ===
+## clarity_project_goals ##
+clarity_project_goals
+Yes    87.096774
+No     12.903226
+Name: proportion, dtype: float64
+
+## sensical_instruction ##
+sensical_instruction
+Yes    96.774194
+No      3.225806
+Name: proportion, dtype: float64
+
+## difficulty ##
+difficulty
+Moderately easy    41.935484
+Somewhat hard      29.032258
+Very easy          16.129032
+Very hard          12.903226
+Name: proportion, dtype: float64
+
+## useful_tutorial ##
+useful_tutorial
+Yes                 87.096774
+I didn't read it     6.451613
+No                   6.451613
+Name: proportion, dtype: float64
+
+## useful_task_helptext ##
+useful_task_helptext
+Yes                      70.967742
+I didn't read it         25.806452
+There is no help text     3.225806
+Name: proportion, dtype: float64
+
+## useful_field_guide ##
+useful_field_guide
+Yes                        61.290323
+I didn't read it           32.258065
+There is no field guide     3.225806
+No                          3.225806
+Name: proportion, dtype: float64
+
+## did_you_read_additional_info ##
+did_you_read_additional_info
+No     64.516129
+Yes    35.483871
+Name: proportion, dtype: float64
+
+## useful_additional_info ##
+useful_additional_info
+Yes    90.909091
+No      9.090909
+Name: proportion, dtype: float64
+
+## suitability_talk_boards ##
+suitability_talk_boards
+Yes    92.592593
+No      7.407407
+Name: proportion, dtype: float64
+
+## useful_project_name ##
+useful_project_name
+Yes    90.0
+No     10.0
+Name: proportion, dtype: float64
+
+## suitable_zooniverse_platform ##
+suitable_zooniverse_platform
+Yes    96.551724
+No      3.448276
+Name: proportion, dtype: float64
+
+## further_interest ##
+further_interest
+Yes                                                                                                                               54.838710
+Not sure                                                                                                                          22.580645
+No                                                                                                                                12.903226
+Yes and I'll bring friends!                                                                                                        6.451613
+No, No, but because I am already moderating another project (that already requires a lot of time). Nice project and good luck!     3.225806
+Name: proportion, dtype: float64
+
