@@ -63,6 +63,40 @@ df["value"] = df["annotations"].apply(lambda x: x[0]["value"])
 df.tail()
 
 # %%
+# show us annotations / annotators
+annotation_counts = df.groupby("user_id").size().reset_index(name="annotation_count")
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+sns.histplot(annotation_counts["annotation_count"], kde=False, bins=30)
+plt.title("Distribution of Annotations per Annotator")
+plt.xlabel("Number of Annotations")
+plt.ylabel("Frequency")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_annotations_per_annotator_distribution.png"))
+plt.show()
+
+# and per workflow
+workflow_counts = df.groupby("workflow_name").size().reset_index(name="annotation_count")
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+sns.barplot(data=workflow_counts, x="workflow_name", y="annotation_count", ci=None)
+plt.title("Number of Annotations per Workflow")
+plt.xlabel("Workflow")
+plt.ylabel("Number of Annotations")
+plt.xticks(rotation=45)
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_annotations_per_workflow.png"))
+plt.show()
+
+for workflow in df["workflow_name"].unique():
+    count = df[df["workflow_name"] == workflow].shape[0]
+    print(f"Number of annotations for workflow {workflow}: {count}")
+    # and n. annotations/annotators
+    n_annotators = df[df["workflow_name"] == workflow]["user_id"].nunique()
+    print(f"Number of annotators for workflow {workflow}: {n_annotators}")
+    results_log.write(f"Number of annotations for workflow {workflow}: {count}\n")
+    results_log.write(f"Number of annotators for workflow {workflow}: {n_annotators}\n")
+
+
+# %%
 # subset senses data
 senses_df = df[df["workflow_name"] == "Senses Survey"]
 # and imageability + concreteness
@@ -311,6 +345,8 @@ for modality in modalities:
     print(f"Krippendorff's alpha for modality {modality} (n_annotators >= {threshold}): {alpha:.4f}")
     results_log.write(f"Krippendorff's alpha for modality {modality} (n_annotators >= {threshold}): {alpha:.4f}\n")
 
+
+# close file
 results_log.close()
 
 # %%
