@@ -133,3 +133,269 @@ Krippendorff's alpha for modality SOUND (n_annotators >= 3): 0.3284
 Krippendorff's alpha for modality TASTE (n_annotators >= 3): 0.7426
 Krippendorff's alpha for modality TOUCH (n_annotators >= 3): 0.1826
 Krippendorff's alpha for modality SMELL (n_annotators >= 3): 0.1455
+
+=== Run 20260225-11 ===
+Level of measurement for Krippendorff's alpha: ordinal
+
+--- Imageability + Concreteness Data Analysis ---
+Imageability data shape: (2064, 15)
+Concreteness data shape: (2083, 15)
+Number of 'unsure' ratings in Imageability: 54
+Number of 'unsure' ratings in Concreteness: 41
+Average standard deviation/subject for imageability: 1.3925
+Average standard deviation/subject for concreteness: 1.3441
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for imageability: 0.3486
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.3455
+Krippendorff's alpha for concreteness: 0.3937
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.3933
+
+--- Senses Data Analysis ---
+Number of 'NONE' modality annotations: 89
+Standard deviation of scores for modality INNERBODILYSENSATIONS: 1.5825
+Standard deviation of scores for modality SIGHT: 1.6333
+Standard deviation of scores for modality SOUND: 1.7254
+Standard deviation of scores for modality TASTE: 1.8695
+Standard deviation of scores for modality TOUCH: 1.5999
+Standard deviation of scores for modality SMELL: 1.6087
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for modality INNERBODILYSENSATIONS: 0.1920
+Krippendorff's alpha for modality SIGHT: 0.1631
+Krippendorff's alpha for modality SOUND: 0.4446
+Krippendorff's alpha for modality TASTE: 0.6717
+Krippendorff's alpha for modality TOUCH: 0.4052
+Krippendorff's alpha for modality SMELL: 0.5386
+
+--- Krippendorff's alpha results (filtered by annotator count) ---
+Number of unique subject_ids after filtering: 66
+Number of unique modalities after filtering: 6
+Krippendorff's alpha for modality INNERBODILYSENSATIONS (n_annotators >= 3): 0.0963
+Krippendorff's alpha for modality SIGHT (n_annotators >= 3): 0.2447
+Krippendorff's alpha for modality SOUND (n_annotators >= 3): 0.3284
+Krippendorff's alpha for modality TASTE (n_annotators >= 3): 0.7426
+Krippendorff's alpha for modality TOUCH (n_annotators >= 3): 0.1826
+Krippendorff's alpha for modality SMELL (n_annotators >= 3): 0.1455
+
+=== Run 20260225-11 ===
+Level of measurement for Krippendorff's alpha: ordinal
+
+=== Run 20260225-11 ===
+Level of measurement for Krippendorff's alpha: ordinal
+
+--- Imageability + Concreteness Data Analysis ---
+Imageability data shape: (5836, 15)
+Concreteness data shape: (8337, 15)
+Number of 'unsure' ratings in Imageability: 176
+Number of 'unsure' ratings in Concreteness: 186
+Average standard deviation/subject for imageability: 0.2332
+Average standard deviation/subject for concreteness: 0.2863
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for imageability: 0.3430
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.3443
+Krippendorff's alpha for concreteness: 0.3842
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.3947
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for imageability: 0.3430
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.3443
+Krippendorff's alpha for concreteness: 0.3842
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.3947
+
+--- Senses Data Analysis ---
+Number of 'NONE' modality annotations: 606
+Standard deviation of scores for modality INNERBODILYSENSATIONS: 1.5583
+Standard deviation of scores for modality SIGHT: 1.6042
+Standard deviation of scores for modality SOUND: 1.7036
+Standard deviation of scores for modality TASTE: 1.7451
+Standard deviation of scores for modality TOUCH: 1.6229
+Standard deviation of scores for modality SMELL: 1.4807
+Standard deviation of scores for modality DONTKNOW: nan
+Standard deviation of scores for modality SENTENCEISUNCLEAR: nan
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for modality INNERBODILYSENSATIONS: 0.1215
+Krippendorff's alpha for modality SIGHT: 0.0743
+Krippendorff's alpha for modality SOUND: 0.3569
+Krippendorff's alpha for modality TASTE: 0.2697
+Krippendorff's alpha for modality TOUCH: 0.2650
+Krippendorff's alpha for modality SMELL: 0.3768
+
+--- Krippendorff's alpha results (filtered by annotator count) ---
+Number of unique subject_ids after filtering: 163
+Number of unique modalities after filtering: 6
+Krippendorff's alpha for modality INNERBODILYSENSATIONS (n_annotators >= 3): 0.0869
+Krippendorff's alpha for modality SIGHT (n_annotators >= 3): 0.0816
+Krippendorff's alpha for modality SOUND (n_annotators >= 3): 0.3176
+Krippendorff's alpha for modality TASTE (n_annotators >= 3): 0.0375
+Krippendorff's alpha for modality TOUCH (n_annotators >= 3): 0.0918
+Krippendorff's alpha for modality SMELL (n_annotators >= 3): 0.1682
+
+=== Run 20260225-11 ===
+Level of measurement for Krippendorff's alpha: ordinal
+
+--- Imageability + Concreteness Data Analysis ---
+Imageability data shape: (5836, 15)
+Concreteness data shape: (8337, 15)
+Number of 'unsure' ratings in Imageability: 176
+Number of 'unsure' ratings in Concreteness: 186
+Average standard deviation/subject for imageability: 0.2332
+Average standard deviation/subject for concreteness: 0.2863
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for imageability: 0.3430
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.3443
+Krippendorff's alpha for concreteness: 0.3842
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.3947
+
+--- Senses Data Analysis ---
+Number of 'DONTKNOW' modality annotations: 9
+Standard deviation of scores for modality NONE: nan
+Standard deviation of scores for modality INNERBODILYSENSATIONS: 1.5583
+Standard deviation of scores for modality SIGHT: 1.6042
+Standard deviation of scores for modality SOUND: 1.7036
+Standard deviation of scores for modality TASTE: 1.7451
+Standard deviation of scores for modality TOUCH: 1.6229
+Standard deviation of scores for modality SMELL: 1.4807
+Standard deviation of scores for modality SENTENCEISUNCLEAR: nan
+
+--- Senses Data Analysis ---
+Number of 'DONTKNOW' modality annotations: 9
+Number of 'SENTENCEISUNCLEAR' modality annotations: 37
+Standard deviation of scores for modality NONE: nan
+Standard deviation of scores for modality INNERBODILYSENSATIONS: 1.5583
+Standard deviation of scores for modality SIGHT: 1.6042
+Standard deviation of scores for modality SOUND: 1.7036
+Standard deviation of scores for modality TASTE: 1.7451
+Standard deviation of scores for modality TOUCH: 1.6229
+Standard deviation of scores for modality SMELL: 1.4807
+
+=== Run 20260225-12 ===
+Level of measurement for Krippendorff's alpha: ordinal
+
+--- Imageability + Concreteness Data Analysis ---
+Imageability data shape: (3428, 15)
+Concreteness data shape: (6095, 15)
+Number of 'unsure' ratings in Imageability: 93
+Number of 'unsure' ratings in Concreteness: 144
+Average standard deviation/subject for imageability: 0.1512
+Average standard deviation/subject for concreteness: 0.2384
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for imageability: 0.3147
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.2432
+Krippendorff's alpha for concreteness: 0.3827
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.4059
+
+--- Senses Data Analysis ---
+Number of 'DONTKNOW' modality annotations: 0
+Number of 'SENTENCEISUNCLEAR' modality annotations: 37
+Standard deviation of scores for modality NONE: nan
+Standard deviation of scores for modality TOUCH: 1.6933
+Standard deviation of scores for modality SIGHT: 1.6286
+Standard deviation of scores for modality TASTE: 1.7946
+Standard deviation of scores for modality SMELL: 1.3638
+Standard deviation of scores for modality SOUND: 1.6906
+Standard deviation of scores for modality INNERBODILYSENSATIONS: 1.5606
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for modality SIGHT: -0.4578
+Krippendorff's alpha for modality TOUCH: 0.5948
+Krippendorff's alpha for modality INNERBODILYSENSATIONS: -0.0079
+Krippendorff's alpha for modality SOUND: 0.5597
+Krippendorff's alpha for modality SMELL: 0.2500
+
+--- Krippendorff's alpha results (filtered by annotator count) ---
+Number of unique subject_ids after filtering: 0
+Number of unique modalities after filtering: 0
+
+=== Run 20260225-13 ===
+Level of measurement for Krippendorff's alpha: ordinal
+
+--- Imageability + Concreteness Data Analysis ---
+Imageability data shape: (3428, 15)
+Concreteness data shape: (6095, 15)
+Number of 'unsure' ratings in Imageability: 93
+Number of 'unsure' ratings in Concreteness: 144
+Average standard deviation/subject for imageability: 0.1512
+Average standard deviation/subject for concreteness: 0.2384
+Average standard deviation/subject for imageability: 0.1512
+Average standard deviation/subject for concreteness: 0.2384
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for imageability: 0.3147
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.2432
+Krippendorff's alpha for concreteness: 0.3827
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.4059
+
+--- Senses Data Analysis ---
+Number of 'DONTKNOW' modality annotations: 0
+Number of 'SENTENCEISUNCLEAR' modality annotations: 37
+Standard deviation of scores for modality NONE: nan
+Standard deviation of scores for modality TOUCH: 1.6933
+Standard deviation of scores for modality SIGHT: 1.6286
+Standard deviation of scores for modality TASTE: 1.7946
+Standard deviation of scores for modality SMELL: 1.3638
+Standard deviation of scores for modality SOUND: 1.6906
+Standard deviation of scores for modality INNERBODILYSENSATIONS: 1.5606
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for modality SIGHT: -0.4578
+Krippendorff's alpha for modality TOUCH: 0.5948
+Krippendorff's alpha for modality INNERBODILYSENSATIONS: -0.0079
+Krippendorff's alpha for modality SOUND: 0.5597
+Krippendorff's alpha for modality SMELL: 0.2500
+
+--- Krippendorff's alpha results (filtered by annotator count) ---
+Number of unique subject_ids after filtering: 0
+Number of unique modalities after filtering: 0
+
+=== Run 20260225-14 ===
+Level of measurement for Krippendorff's alpha: ordinal
+Number of annotations for workflow Concreteness: 6095
+Number of annotations for workflow Imageability: 3428
+Number of annotations for workflow Senses Survey: 1315
+Number of annotations for workflow Concreteness: 6095
+Number of annotators for workflow Concreteness: 455
+Number of annotations for workflow Imageability: 3428
+Number of annotators for workflow Imageability: 198
+Number of annotations for workflow Senses Survey: 1315
+Number of annotators for workflow Senses Survey: 134
+
+--- Imageability + Concreteness Data Analysis ---
+Imageability data shape: (3428, 15)
+Concreteness data shape: (6095, 15)
+Number of 'unsure' ratings in Imageability: 93
+Number of 'unsure' ratings in Concreteness: 144
+Average standard deviation/subject for imageability: 0.1512
+Average standard deviation/subject for concreteness: 0.2384
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for imageability: 0.3147
+Krippendorff's alpha for imageability (n_annotators >= 5): 0.2432
+Krippendorff's alpha for concreteness: 0.3827
+Krippendorff's alpha for concreteness (n_annotators >= 5): 0.4059
+
+--- Senses Data Analysis ---
+Number of 'DONTKNOW' modality annotations: 0
+Number of 'SENTENCEISUNCLEAR' modality annotations: 37
+Standard deviation of scores for modality NONE: nan
+Standard deviation of scores for modality TOUCH: 1.6933
+Standard deviation of scores for modality SIGHT: 1.6286
+Standard deviation of scores for modality TASTE: 1.7946
+Standard deviation of scores for modality SMELL: 1.3638
+Standard deviation of scores for modality SOUND: 1.6906
+Standard deviation of scores for modality INNERBODILYSENSATIONS: 1.5606
+
+--- Krippendorff's alpha results ---
+Krippendorff's alpha for modality SIGHT: -0.4578
+Krippendorff's alpha for modality TOUCH: 0.5948
+Krippendorff's alpha for modality INNERBODILYSENSATIONS: -0.0079
+Krippendorff's alpha for modality SOUND: 0.5597
+Krippendorff's alpha for modality SMELL: 0.2500
+
+--- Krippendorff's alpha results (filtered by annotator count) ---
+Number of unique subject_ids after filtering: 0
+Number of unique modalities after filtering: 0

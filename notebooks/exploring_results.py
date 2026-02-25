@@ -26,11 +26,11 @@ level_of_measurement = 'ordinal'  # or interval for krippendorff's alpha
 results_log.write(f"Level of measurement for Krippendorff's alpha: {level_of_measurement}\n")
 
 # %%
-df = pd.read_csv("../data/beta_data/2026-01-13_the-senses-of-stories-classifications.csv")#../data/beta_data/2026-01-08_betadata.csv")
+df = pd.read_csv("../data/beta_data/the-senses-of-stories-classifications-3.csv")#../data/beta_data/2026-01-08_betadata.csv")
 
 # drop everything created before 2025-11-26 13:15:19 UTC
 df["created_at"] = pd.to_datetime(df["created_at"], utc=True)
-cutoff_date = pd.to_datetime("2025-11-26 13:15:19", utc=True)
+cutoff_date = pd.to_datetime("2026-02-23 13:15:19", utc=True)
 df = df[df["created_at"] >= cutoff_date]
 
 # add dummy user_id column from user_name
@@ -38,6 +38,18 @@ df["user_id"] = df["user_name"].astype("category").cat.codes
 df["user_id"] = df["user_id"].apply(lambda x: f"annotator_{x}")
 
 df.head()
+
+# %%
+# see dist of dates
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+sns.histplot(df["created_at"], kde=False, bins=30)
+plt.title("Distribution of Annotation Dates")
+plt.xlabel("Date")
+plt.ylabel("Frequency")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_annotation_dates_distribution.png"))
+plt.show()
+
 # %%
 # get task from dict in annotations column
 # make sure that it is not string
@@ -93,6 +105,25 @@ img = img[img["value"] != 0]
 conc = conc[conc["value"] != 0]
 
 # %%
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+sns.histplot(img["value"])
+plt.title("Imageability Ratings Distribution")
+plt.xlabel("Rating")
+plt.ylabel("Frequency")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_imageability_ratings_distribution.png"))
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+sns.histplot(conc["value"])
+plt.title("Concreteness Ratings Distribution")
+plt.xlabel("Rating")
+plt.ylabel("Frequency")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_concreteness_ratings_distribution.png"))
+plt.show()
+
+# %%
 dfs = {"imageability": img, "concreteness": conc}
 storage = {}
 
@@ -117,6 +148,7 @@ for key, data in dfs.items():
     plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_{key}_n_annotators_distribution.png"))
     plt.show()
 
+
 # %%
 # log average SD
 for key in storage:
@@ -136,6 +168,8 @@ for key in storage:
     plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_{key}_ratings_distribution.png"))
     plt.show()
 
+# %%
+storage["imageability"].head()
 
 # %%
 # alright, let's see how much annotators agree with each other
@@ -180,11 +214,15 @@ long_df["modality"] = long_df["value"].apply(lambda x: x.get("choice"))
 long_df["score"] = long_df["value"].apply(extract_score)
 
 # log how many "NONE" modalities there are
-none_count = long_df[long_df["modality"] == "NONE"].shape[0]
-print(f"Number of 'NONE' modality annotations: {none_count}")
-results_log.write(f"Number of 'NONE' modality annotations: {none_count}\n")
+none_count = long_df[long_df["modality"] == "DONTKNOW"].shape[0]
+print(f"Number of 'DONTKNOW' modality annotations: {none_count}")
+results_log.write(f"Number of 'DONTKNOW' modality annotations: {none_count}\n")
+sentence_unclear_count = long_df[long_df["modality"] == "SENTENCEISUNCLEAR"].shape[0]
+print(f"Number of 'SENTENCEISUNCLEAR' modality annotations: {sentence_unclear_count}")
+results_log.write(f"Number of 'SENTENCEISUNCLEAR' modality annotations: {sentence_unclear_count}\n")
 # and remove "NONE" modalities
-long_df = long_df[long_df["modality"] != "NONE"]
+long_df = long_df[long_df["modality"] != "DONTKNOW"]
+long_df = long_df[long_df["modality"] != "SENTENCEISUNCLEAR"]
 
 # keep only what you need
 long_df = long_df[["subject_ids", "user_id", "modality", "score"]].reset_index(drop=True)
