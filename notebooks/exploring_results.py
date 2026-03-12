@@ -26,7 +26,7 @@ level_of_measurement = 'ordinal'  # or interval for krippendorff's alpha
 results_log.write(f"Level of measurement for Krippendorff's alpha: {level_of_measurement}\n")
 
 # %%
-df = pd.read_csv("../data/beta_data/the-senses-of-stories-classifications-3.csv")#../data/beta_data/2026-01-08_betadata.csv")
+df = pd.read_csv("../data/beta_data/the-senses-of-stories-classifications-4.csv")#../data/beta_data/2026-01-08_betadata.csv")
 
 # drop everything created before 2025-11-26 13:15:19 UTC
 df["created_at"] = pd.to_datetime(df["created_at"], utc=True)
@@ -40,12 +40,19 @@ df["user_id"] = df["user_id"].apply(lambda x: f"annotator_{x}")
 df.head()
 
 # %%
+# make "created_at" into dates
+df["created_at"] = pd.to_datetime(df["created_at"], utc=True)
+# get just days
+df["created_at_day"] = df["created_at"].dt.date
+
+# %%
 # see dist of dates
 plt.figure(figsize=(10, 6))
 sns.set_style("whitegrid")
-sns.histplot(df["created_at"], kde=False, bins=30)
+sns.histplot(df["created_at_day"], kde=False, bins=len(df["created_at_day"].unique()))
 plt.title("Distribution of Annotation Dates")
 plt.xlabel("Date")
+plt.xticks(rotation=45)
 plt.ylabel("Frequency")
 plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_annotation_dates_distribution.png"))
 plt.show()
@@ -61,6 +68,10 @@ def maybe_eval(x):
 df["annotations"] = df["annotations"].apply(maybe_eval)
 df["value"] = df["annotations"].apply(lambda x: x[0]["value"])
 df.tail()
+
+# %%
+# we want to get the viewport here
+
 
 # %%
 # show us annotations / annotators
@@ -94,6 +105,112 @@ for workflow in df["workflow_name"].unique():
     print(f"Number of annotators for workflow {workflow}: {n_annotators}")
     results_log.write(f"Number of annotations for workflow {workflow}: {count}\n")
     results_log.write(f"Number of annotators for workflow {workflow}: {n_annotators}\n")
+
+# %%
+# let's see n_annotators across workflow over time
+workflow_time = df.groupby(["created_at_day", "workflow_name"])["user_id"].nunique().reset_index(name="n_annotators")
+plt.figure(figsize=(12, 6))
+sns.set_style("whitegrid")
+sns.lineplot(data=workflow_time, x="created_at_day", y="n_annotators", hue="workflow_name", marker="o")
+plt.title("Number of Annotators per Workflow Over Time")
+plt.xlabel("Date")
+plt.xticks(rotation=45)
+plt.ylabel("Number of Annotators")
+plt.legend(title="Workflow")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_annotators_per_workflow_over_time.png"))
+plt.show()
+
+# and also number of annotations over time
+workflow_time_annotations = df.groupby(["created_at_day", "workflow_name"]).size().reset_index(name="annotation_count")
+plt.figure(figsize=(12, 6))
+sns.set_style("whitegrid")
+sns.lineplot(data=workflow_time_annotations, x="created_at_day", y="annotation_count", hue="workflow_name", marker="o")
+plt.title("Number of Annotations per Workflow Over Time")
+plt.xlabel("Date")
+plt.xticks(rotation=45)
+plt.ylabel("Number of Annotations")
+plt.legend(title="Workflow")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_annotations_per_workflow_over_time.png"))
+plt.show()
+
+# do n_annotators and n_annotations correlate?
+merged_time = pd.merge(workflow_time, workflow_time_annotations, on=["created_at_day", "workflow_name"])
+correlation = merged_time["n_annotators"].corr(merged_time["annotation_count"])
+print(f"Correlation between number of annotators and number of annotations over time: {correlation:.4f}")
+# plot correlation
+plt.figure(figsize=(10, 6))
+sns.set_style("whitegrid")
+sns.scatterplot(data=merged_time, x="n_annotators", y="annotation_count", hue="workflow_name")
+plt.title("Correlation between Number of Annotators and Annotations")
+plt.xlabel("Number of Annotators")
+plt.ylabel("Number of Annotations")
+plt.legend(title="Workflow")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_annotators_annotations_correlation.png"))
+plt.show()
+
+# How to see whether the correlation is the same over time?
+# we can do a rolling correlation with a window of 7 days
+merged_time["rolling_correlation"] = merged_time.groupby("workflow_name").apply(lambda x: x["n_annotators"].rolling(window=5).corr(x["annotation_count"])).reset_index(level=0, drop=True)
+# plot rolling correlation
+plt.figure(figsize=(12, 6))
+sns.set_style("whitegrid")
+sns.lineplot(data=merged_time, x="created_at_day", y="rolling_correlation", hue="workflow_name", marker="o")
+plt.title("Rolling Correlation between Number of Annotators and Annotations Over Time")
+# add line of aggregated over groups
+sns.lineplot(data=merged_time.groupby("created_at_day")["rolling_correlation"].mean().reset_index(), x="created_at_day", y="rolling_correlation", color="black", marker="o", label="Average", linestyle="--")
+plt.xlabel("Date")
+plt.xticks(rotation=45)
+plt.ylabel("Rolling Correlation")
+plt.legend(title="Workflow")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_rolling_correlation.png"))
+plt.show()
+
+# also we want a plot that shows whether we are above mean annotations/annotators per workflow
+# let's not say mean, but what we have from the first day
+
+# %%
+merged_time['annotator_ratio'] = merged_time['annotation_count'] / merged_time['n_annotators'] 
+plt.figure(figsize=(12, 6))
+sns.set_style("whitegrid")
+sns.lineplot(data=merged_time, x="created_at_day", y="annotator_ratio", hue="workflow_name", marker="o")
+# add line of aggregated mean ratio over groups for each day
+sns.lineplot(data=merged_time.groupby("created_at_day")["annotator_ratio"].mean().reset_index(), x="created_at_day", y="annotator_ratio", color="black", marker="o", label="Average", linestyle="--")
+# add line of aggregated mean ratio over groups for the first day
+second_day = merged_time["created_at_day"].min() + pd.Timedelta(days=1)
+initial_ratios = merged_time[merged_time["created_at_day"] == second_day][["workflow_name", "annotator_ratio"]]
+mean_initial = initial_ratios["annotator_ratio"].mean()
+# just set line of mean initial ratio
+plt.axhline(mean_initial, color="grey", linestyle="-", label="Mean Initial Ratio")
+# settings
+plt.title("N annotations / annotators over time")
+plt.xlabel("Date")
+plt.xticks(rotation=45)
+plt.ylabel("Annotator to Annotation Ratio")
+plt.legend(title="Workflow")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_annotator_annotation_ratio_over_time.png"))
+plt.show()
+
+# %%
+# last thing, let's plot when the new annotators come in. 
+df_unique = df.drop_duplicates(subset="user_id", keep="first")
+print(f"Number of unique annotators: {df_unique.shape[0]}")
+print(df_unique.head())
+
+# get n_annotators per day
+annotators_per_day = df_unique.groupby("created_at_day")["user_id"].nunique().reset_index(name="n_annotators")
+annotators_per_day.head()
+# %%
+
+plt.figure(figsize=(12, 6))
+
+sns.set_style("whitegrid")
+sns.lineplot(data=annotators_per_day, x="created_at_day", y="n_annotators", marker="o")
+plt.title("Number of Unique Annotators Over Time")
+plt.xlabel("Date")
+plt.xticks(rotation=45)
+plt.ylabel("Number of Unique Annotators")
+plt.savefig(os.path.join(FIG_FOLDER, f"{ts}_unique_annotators_over_time.png"))
+plt.show()
 
 
 # %%
@@ -393,4 +510,29 @@ for key in ["imageability", "concreteness"]:
     r = subset["r"].mean()
     print(f"Paivio-style IRR {key}: r = {r:.4f}")
 
+# %%
+
+
+
+# Okay, what do we have annotated now? 
+
+df.head()
+# %%
+# "subject_ids" 
+
+meta = pd.read_csv("../data/the-senses-of-stories-subjects.csv")
+meta.head()
+
+
+# %%
+sos_data = pd.read_csv("../data/org_data_processing/data/2025-11-02_15-38_senses_stories_final_set.csv")
+
+sos_data.columns
+# %%
+sos_data = sos_data[['fileid', 'text', 'category', 'language', 'genre', 'genre2', 'pubdate',
+       'author_last', 'author_first', 'work_title', 'translation', 'pubhouse',
+       'prize', 'winnershortlist', 'author_gender', 'author_nationality']].copy()
+
+
+sos_data.head()
 # %%
